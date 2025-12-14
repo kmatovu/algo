@@ -11,3 +11,5 @@ inventory_users
 __pycache__/
 *.pyc
 algo.egg-info/
+
+.env_local*
