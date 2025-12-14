@@ -158,10 +158,23 @@ if [ -f "requirements.yml" ]; then
     uv run ansible-galaxy collection install -r requirements.yml > /dev/null 2>&1 || true
 fi
 
+# Check if deploy-vars.yml exists and prepare extra vars argument
+DEPLOY_VARS_ARGS=()
+if [ -f "deploy-vars.yml" ]; then
+    echo "Found deploy-vars.yml, loading configuration..."
+    DEPLOY_VARS_ARGS+=("-e" "@deploy-vars.yml")
+fi
+
+# Pass DO_API_TOKEN if set
+if [ -n "$DO_API_TOKEN" ]; then
+    echo "Using DO_API_TOKEN from environment..."
+    DEPLOY_VARS_ARGS+=("-e" "do_token=$DO_API_TOKEN")
+fi
+
 # Run the appropriate playbook
 case "$1" in
   update-users)
     uv run ansible-playbook users.yml "${@:2}" -t update-users ;;
   *)
-    uv run ansible-playbook main.yml "${@}" ;;
+    uv run ansible-playbook main.yml "${DEPLOY_VARS_ARGS[@]}" "${@}" ;;
 esac

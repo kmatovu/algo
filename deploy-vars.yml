@@ -1,0 +1,14 @@
+---
+# Provider configuration
+provider: digitalocean
+region: nyc1
+
+# Server configuration
+server_name: algo
+
+# Optional features (all disabled)
+ondemand_cellular: false
+ondemand_wifi: false
+dns_adblocking: false
+ssh_tunneling: false
+store_pki: false
